@@ -17,4 +17,3 @@ class ExampleTest(unittest.TestCase):
     def test(self):
         auth_page = Page(self.driver)
         auth_page.open()
-        time.sleep(4)
