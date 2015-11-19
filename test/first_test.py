@@ -21,12 +21,11 @@ class ExampleTest(unittest.TestCase):
     def test(self):
         auth_page = AuthPage(self.driver)
         auth_page.open()
-        time.sleep(1)
+
         auth_form = auth_page.form
         auth_form.open_form()
-        time.sleep(1)
         auth_form.set_login(self.USEREMAIL)
         auth_form.set_password(self.PASSWORD)
-        time.sleep(1)
         auth_form.submit()
+
         time.sleep(1000)
