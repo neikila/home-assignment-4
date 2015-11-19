@@ -31,6 +31,38 @@ class AuthForm(Component):
         self.driver.find_element_by_xpath(self.SUBMIT).click()
 
 
+class AskForm(Component):
+    QUESTION = '//input[@name="qtext"]'
+    DESCRIPTION = 'textarea[@placeholder="Введите текст пояснения"]'
+    FOTO = '' #TODO
+    VIDEO = '' #TODO
+    CATEGORY = "select[@id='ask-categories']"
+    SUBCATEGORY = "select[@id='ask-sub-category']"
+    SWITCH_NOTIFICATION = 'input[@id="ask-receive-email"]'
+    SWITCH_COMMENTS = 'input[@id="ask-allow-comments"]'
+    TERMS = "//a[@href='https://help.mail.ru/otvety-help/agreement']"
+    SUBMIT = "//a[@id='ask-q-only']"
+
+    def set_question(self, question):
+        self.driver.find_element_by_xpath(self.QUESTION).send_keys(question)
+
+    def set_description(self, description):
+        self.driver.find_element_by_xpath(self.DESCRIPTION).send_keys(description)
+
+    # узнать, как выбирать фото, видео, категории и саб категории
+
+    def off_notifications(self):
+        self.driver.find_element_by_xpath(self.SWITCH_NOTIFICATION).click()
+
+    def off_comments(self):
+        self.driver.find_element_by_xpath(self.SWITCH_COMMENTS).click()
+
+    # узнать, что делать с пользовательским соглашением
+
+    def submit(self):
+        self.driver.find_element_by_xpath(self.SUBMIT).click()
+
+
 class Page(object):
     BASE_URL = 'https://otvet.mail.ru/'
     PATH = ''
@@ -50,3 +82,11 @@ class AuthPage(Page):
     @property
     def form(self):
         return AuthForm(self.driver)
+
+
+class AskPage(Page):
+    PATH = 'ask'
+
+    @property
+    def form(self):
+        return AskForm(self.driver)
