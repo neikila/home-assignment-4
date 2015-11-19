@@ -6,6 +6,8 @@ import urlparse
 
 from selenium.webdriver import DesiredCapabilities, Remote
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 
 class Component(object):
     def __init__(self, driver):
@@ -22,6 +24,9 @@ class AuthForm(Component):
         self.driver.find_element_by_xpath(self.LOGIN_BUTTON).click()
 
     def set_login(self, login):
+        # исправить на "хороший" wait
+        wait = WebDriverWait(self.driver, 10)
+        wait.until(EC.element_to_be_clickable((By.XPATH, self.LOGIN_BUTTON)))
         self.driver.find_element_by_xpath(self.LOGIN).send_keys(login)
 
     def set_password(self, pwd):
@@ -32,8 +37,8 @@ class AuthForm(Component):
 
 
 class AskForm(Component):
-    QUESTION = '//input[@name="qtext"]'
-    DESCRIPTION = 'textarea[@placeholder="Введите текст пояснения"]'
+    QUESTION = "//textarea[@id='ask-text']"
+    DESCRIPTION = '//textarea[@placeholder="Введите текст пояснения"]'
     FOTO = '' #TODO
     VIDEO = '' #TODO
     CATEGORY = "select[@id='ask-categories']"
@@ -44,6 +49,9 @@ class AskForm(Component):
     SUBMIT = "//a[@id='ask-q-only']"
 
     def set_question(self, question):
+        # исправить на "хороший" wait
+        wait = WebDriverWait(self.driver, 10)
+        wait.until(EC.element_to_be_clickable((By.XPATH, self.QUESTION)))
         self.driver.find_element_by_xpath(self.QUESTION).send_keys(question)
 
     def set_description(self, description):

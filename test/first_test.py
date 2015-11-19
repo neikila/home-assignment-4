@@ -4,6 +4,8 @@ import time
 class ExampleTest(unittest.TestCase):
     USEREMAIL = 'another95@mail.ru'
     PASSWORD = 'rfrltkf'
+    QUESTION = 'Strange question'
+    DESCRIPTION = 'Very strange'
 
     def setUp(self):
         browser = 'CHROME'
@@ -27,5 +29,16 @@ class ExampleTest(unittest.TestCase):
         auth_form.set_login(self.USEREMAIL)
         auth_form.set_password(self.PASSWORD)
         auth_form.submit()
+
+        time.sleep(1)
+
+        ask_page = AskPage(self.driver)
+        ask_page.open()
+
+        ask_form = ask_page.form
+        ask_form.set_question(self.QUESTION)
+        ask_form.set_description(self.DESCRIPTION)
+        ask_form.off_comments()
+        ask_form.off_notifications()
 
         time.sleep(1000)
