@@ -2,6 +2,9 @@ from basic_test import *
 import time
 
 class ExampleTest(unittest.TestCase):
+    USEREMAIL = 'another95@mail.ru'
+    PASSWORD = 'rfrltkf'
+
     def setUp(self):
         browser = 'CHROME'
 
@@ -12,8 +15,18 @@ class ExampleTest(unittest.TestCase):
         )
 
     def tearDown(self):
-        self.driver.quit()
+        pass
+        # self.driver.quit()
 
     def test(self):
-        auth_page = Page(self.driver)
+        auth_page = AuthPage(self.driver)
         auth_page.open()
+        time.sleep(1)
+        auth_form = auth_page.form
+        auth_form.open_form()
+        time.sleep(1)
+        auth_form.set_login(self.USEREMAIL)
+        auth_form.set_password(self.PASSWORD)
+        time.sleep(1)
+        auth_form.submit()
+        time.sleep(1000)
