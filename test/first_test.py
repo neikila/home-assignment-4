@@ -2,10 +2,12 @@ from basic_test import *
 import time
 
 class ExampleTest(unittest.TestCase):
-    USEREMAIL = 'another95@mail.ru'
-    PASSWORD = 'rfrltkf'
-    QUESTION = 'Strange question'
+    USEREMAIL = 'artur.pirozhkov.like.a.boss@mail.ru'
+    PASSWORD = 'testirovanie'
+    QUESTION = 'Test question'
     DESCRIPTION = 'Very strange'
+    FOTO = 'http://uu.appsforall.ru/542ee0c9be4f73.01671974.jpg'
+    VIDEO = 'https://cloclo24.datacloudmail.ru/weblink/view/Gpdt/BnymkS35Q?etag=65D1C4B510DF51FF36E413F340F21E8FC45F4D58'
 
     def setUp(self):
         browser = 'CHROME'
