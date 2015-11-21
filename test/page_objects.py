@@ -95,10 +95,19 @@ class AskForm(Component):
         self.driver.find_element_by_xpath(self.SUBCATEGORY + (self.OPTION % subcategory_name)).click()
 
 
-class Question(Component):
-    QUESTION = "//h1[@class='q--qtext entry-title']/index"
-    QUESTION_DESCRIPTION = "//div[@class='q--qcomment h4 entry-content']"
-    USERNAME = "//a[@class='q--user h5 author']/b"
+class QuestionForm(Component):
+    QUESTION = "//*[contains(@class,'q--qtext')]/index"
+    QUESTION_DESCRIPTION = "//*[contains(@class,'q--qcomment')]"
+    USERNAME = "//*[contains(@class,'q--user')]/b"
+    QUESTION_FIELD = "//*[contains(@class,'page-question')]"
+    DELETE = "//button[@data-type='delete-question']"
+    CATEGORY = "//a[contains(@class,'list__title')]/span[@itemprop='title']"
+    SUBCATEGORY = "//a[contains(@class,'selected')]/span[@itemprop='title']"
+
+    def wait(self):
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, self.QUESTION_FIELD))
+        )
 
     def get_question(self):
         return self.driver.find_element_by_xpath(self.QUESTION).text
@@ -108,6 +117,24 @@ class Question(Component):
 
     def get_username(self):
         return self.driver.find_element_by_xpath(self.USERNAME).text
+
+    def delete(self):
+        self.driver.find_element_by_xpath(self.DELETE).clicl()
+
+    def get_category(self):
+        return self.driver.find_element_by_xpath(self.CATEGORY).text
+
+    def get_subcategory(self):
+        return self.driver.find_element_by_xpath(self.SUBCATEGORY).text
+
+class ProfileListForm(Component):
+    LAST_QUESTION = "//div[@class='page-profile-list']/div[1]/a"
+
+    def get_last_question_url(self):
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, self.LAST_QUESTION))
+        )
+        return self.driver.find_element_by_xpath(self.LAST_QUESTION).get_attribute("href")
 
 
 class PhotoForm(Component):
@@ -163,8 +190,25 @@ class AskPage(Page):
 
 
 class QuestionPage(Page):
-    PATH = "question/184484161"
+    PATH = ''
+
+    def __init__(self, driver, url):
+        self.BASE_URL = url
+        super(QuestionPage, self).__init__(driver)
 
     @property
     def form(self):
-        return Question(self.driver)
+        return QuestionForm(self.driver)
+
+
+class ProfilePage(Page):
+    PROFILE_HREF = "//a[contains(@class, 'pm-toolbar__button__inner_avatar')]"
+    PATH = ''
+
+    def __init__(self, driver):
+        self.BASE_URL = driver.find_element_by_xpath(self.PROFILE_HREF).get_attribute("href")
+        super(ProfilePage, self).__init__(driver)
+
+    @property
+    def form(self):
+        return ProfileListForm(self.driver)
