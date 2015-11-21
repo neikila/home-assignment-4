@@ -19,13 +19,13 @@ class AuthForm(Component):
     PASSWORD = '//input[@name="Password"]'
     SUBMIT = '//input[@value="Войти"]'
     LOGIN_BUTTON = "//a[@id='PH_authLink']"
+    EXIT = "//a[@id='PH_logoutLink']"
 
     def open_form(self):
         self.driver.find_element_by_xpath(self.LOGIN_BUTTON).click()
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, self.LOGIN))
         )
-
 
     def set_login(self, login):
         self.driver.find_element_by_xpath(self.LOGIN).send_keys(login)
@@ -35,6 +35,10 @@ class AuthForm(Component):
 
     def submit(self):
         self.driver.find_element_by_xpath(self.SUBMIT).click()
+        WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, self.EXIT))
+        )
+
 
 
 class AskForm(Component):
@@ -54,7 +58,7 @@ class AskForm(Component):
     SUBMIT_QUESTION = "//div[@class='ask-submit']/button"
 
     def wait_for_upload(self):
-        WebDriverWait(self.driver, 10).until(
+        WebDriverWait(self.driver, 5).until(
             EC.presence_of_element_located((By.XPATH, self.SWITCH_COMMENTS))
         )
 
@@ -66,7 +70,7 @@ class AskForm(Component):
 
     def open_and_get_foto_form(self):
         self.driver.find_element_by_xpath(self.FOTO).click()
-        return FotoForm(self.driver)
+        return PhotoForm(self.driver)
 
     def open_and_get_video_form(self):
         self.driver.find_element_by_xpath(self.VIDEO).click()
@@ -91,8 +95,22 @@ class AskForm(Component):
         self.driver.find_element_by_xpath(self.SUBCATEGORY + (self.OPTION % subcategory_name)).click()
 
 
-# Программирование
-class FotoForm(Component):
+class Question(Component):
+    QUESTION = "//h1[@class='q--qtext entry-title']/index"
+    QUESTION_DESCRIPTION = "//div[@class='q--qcomment h4 entry-content']"
+    USERNAME = "//a[@class='q--user h5 author']/b"
+
+    def get_question(self):
+        return self.driver.find_element_by_xpath(self.QUESTION).text
+
+    def get_question_description(self):
+        return self.driver.find_element_by_xpath(self.QUESTION_DESCRIPTION).text
+
+    def get_username(self):
+        return self.driver.find_element_by_xpath(self.USERNAME).text
+
+
+class PhotoForm(Component):
     CHOOSE_LINK = '//span[text()="укажите ссылку в сети"]'
     LINK = '//input[@placeholder="Укажите ссылку на изображение"]'
 
@@ -142,3 +160,11 @@ class AskPage(Page):
     @property
     def form(self):
         return AskForm(self.driver)
+
+
+class QuestionPage(Page):
+    PATH = "question/184484161"
+
+    @property
+    def form(self):
+        return Question(self.driver)
