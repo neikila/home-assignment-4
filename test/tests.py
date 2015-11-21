@@ -1,13 +1,18 @@
+# -*- coding: utf-8 -*-
+
 from page_objects import *
 import time
 
 class PositiveTests(unittest.TestCase):
     USEREMAIL = 'artur.pirozhkov.like.a.boss@mail.ru'
     PASSWORD = 'testirovanie'
-    QUESTION = 'Test question'
-    DESCRIPTION = 'Very strange'
+    QUESTION = u'Test question. I hope now it is long enough? You need more symbols, really? ' \
+               u'Неужели нельзя создавать вопросы, в которых отсутствую русские символы?'
+    DESCRIPTION = 'Very strange. I need MORE description!'
     FOTO = 'http://uu.appsforall.ru/542ee0c9be4f73.01671974.jpg'
     VIDEO = 'https://cloclo24.datacloudmail.ru/weblink/view/Gpdt/BnymkS35Q?etag=65D1C4B510DF51FF36E413F340F21E8FC45F4D58'
+    CATEGORY = 'Программирование'
+    SUBCATEGORY = 'Python'
 
     def auth(self):
         auth_page = AuthPage(self.driver)
@@ -45,5 +50,9 @@ class PositiveTests(unittest.TestCase):
         ask_form.set_description(self.DESCRIPTION)
         ask_form.off_comments()
         ask_form.off_notifications()
+        ask_form.set_category(self.CATEGORY)
+        ask_form.set_subcategory(self.SUBCATEGORY)
+        ask_form.submit()
+        # А теперь вводим капчу
 
         time.sleep(1000)

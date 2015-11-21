@@ -22,11 +22,12 @@ class AuthForm(Component):
 
     def open_form(self):
         self.driver.find_element_by_xpath(self.LOGIN_BUTTON).click()
-
-    def set_login(self, login):
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, self.LOGIN))
         )
+
+
+    def set_login(self, login):
         self.driver.find_element_by_xpath(self.LOGIN).send_keys(login)
 
     def set_password(self, pwd):
@@ -37,17 +38,20 @@ class AuthForm(Component):
 
 
 class AskForm(Component):
-    #TODO категории и пользовательское соглашение
+    # TODO категории и пользовательское соглашение
     QUESTION = "//textarea[@id='ask-text']"
     DESCRIPTION = '//textarea[@placeholder="Введите текст пояснения"]'
     FOTO = '//span[text()="Фото"]'
     VIDEO = '//span[text()="Видео"]'
     CATEGORY = "//select[@id='ask-categories']"
     SUBCATEGORY = "//select[@id='ask-sub-category']"
+    OPTION = "/option[text()='%s']"
     SWITCH_NOTIFICATION = "//input[@id='ask-receive-email']"
     SWITCH_COMMENTS = "//input[@id='ask-allow-comments']"
     TERMS = "//a[@href='https://help.mail.ru/otvety-help/agreement']"
+    # TODO У меня такого SUBMIT нет
     SUBMIT = "//a[@id='ask-q-only']"
+    SUBMIT_QUESTION = "//div[@class='ask-submit']/button"
 
     def wait_for_upload(self):
         WebDriverWait(self.driver, 10).until(
@@ -75,9 +79,19 @@ class AskForm(Component):
         self.driver.find_element_by_xpath(self.SWITCH_COMMENTS).click()
 
     def submit(self):
-        self.driver.find_element_by_xpath(self.SUBMIT).click()
+        self.driver.find_element_by_xpath(self.SUBMIT_QUESTION).click()
+
+    def set_category(self, category_name):
+        self.driver.find_element_by_xpath(self.CATEGORY + (self.OPTION % category_name)).click()
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, self.SUBCATEGORY))
+        )
+
+    def set_subcategory(self, subcategory_name):
+        self.driver.find_element_by_xpath(self.SUBCATEGORY + (self.OPTION % subcategory_name)).click()
 
 
+# Программирование
 class FotoForm(Component):
     CHOOSE_LINK = '//span[text()="укажите ссылку в сети"]'
     LINK = '//input[@placeholder="Укажите ссылку на изображение"]'
