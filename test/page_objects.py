@@ -24,9 +24,9 @@ class AuthForm(Component):
         self.driver.find_element_by_xpath(self.LOGIN_BUTTON).click()
 
     def set_login(self, login):
-        # исправить на "хороший" wait
-        wait = WebDriverWait(self.driver, 10)
-        wait.until(EC.element_to_be_clickable((By.XPATH, self.LOGIN)))
+        WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, self.LOGIN))
+        )
         self.driver.find_element_by_xpath(self.LOGIN).send_keys(login)
 
     def set_password(self, pwd):
@@ -42,12 +42,17 @@ class AskForm(Component):
     DESCRIPTION = '//textarea[@placeholder="Введите текст пояснения"]'
     FOTO = '//span[text()="Фото"]'
     VIDEO = '//span[text()="Видео"]'
-    CATEGORY = "select[@id='ask-categories']"
-    SUBCATEGORY = "select[@id='ask-sub-category']"
-    SWITCH_NOTIFICATION = 'input[type="checkbox"]#ask-receive-email'
-    SWITCH_COMMENTS = 'input[type="checkbox"]#ask-allow-comments'
+    CATEGORY = "//select[@id='ask-categories']"
+    SUBCATEGORY = "//select[@id='ask-sub-category']"
+    SWITCH_NOTIFICATION = "//input[@id='ask-receive-email']"
+    SWITCH_COMMENTS = "//input[@id='ask-allow-comments']"
     TERMS = "//a[@href='https://help.mail.ru/otvety-help/agreement']"
     SUBMIT = "//a[@id='ask-q-only']"
+
+    def wait_for_upload(self):
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, self.SWITCH_COMMENTS))
+        )
 
     def set_question(self, question):
         self.driver.find_element_by_xpath(self.QUESTION).send_keys(question)
@@ -64,10 +69,10 @@ class AskForm(Component):
         return VideoForm(self.driver)
 
     def off_notifications(self):
-        self.driver.find_element_by_css_selector(self.SWITCH_NOTIFICATION).click()
+        self.driver.find_element_by_xpath(self.SWITCH_NOTIFICATION).click()
 
     def off_comments(self):
-        self.driver.find_element_by_css_selector(self.SWITCH_COMMENTS).click()
+        self.driver.find_element_by_xpath(self.SWITCH_COMMENTS).click()
 
     def submit(self):
         self.driver.find_element_by_xpath(self.SUBMIT).click()
