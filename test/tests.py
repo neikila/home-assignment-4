@@ -52,7 +52,7 @@ class PositiveTests(unittest.TestCase):
         ask_form.off_notifications()
         ask_form.set_category(self.CATEGORY)
         ask_form.set_subcategory(self.SUBCATEGORY)
-        ask_form.submit()
+        # ask_form.submit()
         # А теперь вводим капчу
 
         time.sleep(1000)
