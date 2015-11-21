@@ -18,8 +18,8 @@ class AuthForm(Component):
     LOGIN = '//input[@name="Login"]'
     PASSWORD = '//input[@name="Password"]'
     SUBMIT = '//input[@value="Войти"]'
-    LOGIN_BUTTON = "//a[@id='PH_authLink']"
-    EXIT = "//a[@id='PH_logoutLink']"
+    LOGIN_BUTTON = "id('PH_authLink')"
+    EXIT = "id('PH_logoutLink')"
 
     def open_form(self):
         self.driver.find_element_by_xpath(self.LOGIN_BUTTON).click()
@@ -42,19 +42,19 @@ class AuthForm(Component):
 
 
 class AskForm(Component):
-    # TODO категории и пользовательское соглашение
-    QUESTION = "//textarea[@id='ask-text']"
+    # TODO пользовательское соглашение
+    QUESTION = "id('ask-text')"
     DESCRIPTION = '//textarea[@placeholder="Введите текст пояснения"]'
     FOTO = '//span[text()="Фото"]'
     VIDEO = '//span[text()="Видео"]'
-    CATEGORY = "//select[@id='ask-categories']"
-    SUBCATEGORY = "//select[@id='ask-sub-category']"
+    CATEGORY = "id('ask-categories')"
+    SUBCATEGORY = "id('ask-sub-category')"
     OPTION = "/option[text()='%s']"
-    SWITCH_NOTIFICATION = "//input[@id='ask-receive-email']"
-    SWITCH_COMMENTS = "//input[@id='ask-allow-comments']"
+    SWITCH_NOTIFICATION = "id('ask-receive-email')"
+    SWITCH_COMMENTS = "id('ask-allow-comments')"
     TERMS = "//a[@href='https://help.mail.ru/otvety-help/agreement']"
     # TODO У меня такого SUBMIT нет
-    SUBMIT = "//a[@id='ask-q-only']"
+    SUBMIT = "id('ask-q-only')"
     SUBMIT_QUESTION = "//div[@class='ask-submit']/button"
 
     def wait_for_upload(self):
