@@ -26,16 +26,16 @@ class PositiveTests(unittest.TestCase):
         auth_form.set_password(self.PASSWORD)
         auth_form.submit()
 
-
-    def ask_question(self):
+    def ask_question(self, comments_off=True, notifications_off=True):
         ask_page = AskPage(self.driver)
         ask_page.open()
         ask_form = ask_page.form
-        ask_form.wait_for_upload()
         ask_form.set_question(self.QUESTION)
         ask_form.set_description(self.DESCRIPTION)
-        ask_form.off_comments()
-        ask_form.off_notifications()
+        if comments_off:
+            ask_form.off_comments()
+        if notifications_off:
+            ask_form.off_notifications()
         ask_form.set_category(self.CATEGORY)
         ask_form.set_subcategory(self.SUBCATEGORY)
         # ask_form.submit()

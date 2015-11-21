@@ -186,7 +186,9 @@ class AskPage(Page):
 
     @property
     def form(self):
-        return AskForm(self.driver)
+        ask_form = AskForm(self.driver)
+        ask_form.wait_for_upload()
+        return ask_form
 
 
 class QuestionPage(Page):
@@ -198,7 +200,9 @@ class QuestionPage(Page):
 
     @property
     def form(self):
-        return QuestionForm(self.driver)
+        question_form = QuestionForm(self.driver)
+        question_form.wait()
+        return question_form
 
 
 class ProfilePage(Page):
