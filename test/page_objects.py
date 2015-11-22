@@ -119,7 +119,7 @@ class QuestionForm(Component):
         return self.driver.find_element_by_xpath(self.USERNAME).text
 
     def delete(self):
-        self.driver.find_element_by_xpath(self.DELETE).clicl()
+        self.driver.find_element_by_xpath(self.DELETE).click()
 
     def get_category(self):
         return self.driver.find_element_by_xpath(self.CATEGORY).text
