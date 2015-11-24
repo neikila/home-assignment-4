@@ -58,6 +58,17 @@ class ProfileListForm(Component):
         return self.driver.find_element_by_xpath(self.LAST_QUESTION).get_attribute("href")
 
 
+class TopToolBarForm(Component):
+    SEARCH_TEXT = "//input[contains(@class, 'pm-toolbar__search__input')]"
+    SUBMIT = "//button[contains(@class, 'js-submit-button')]"
+
+    def search(self, text):
+        self.driver.find_element_by_xpath(self.SEARCH_TEXT).send_keys(text)
+
+    def submit(self):
+        self.driver.find_element_by_xpath(self.SUBMIT).click()
+
+
 class Page(object):
     BASE_URL = 'https://otvet.mail.ru/'
     PATH = ''
@@ -83,3 +94,11 @@ class QuestionPage(Page):
         question_form = QuestionForm(self.driver)
         question_form.wait()
         return question_form
+
+
+class MainPage(Page):
+    PATH = ''
+
+    @property
+    def form(self):
+        return TopToolBarForm(self.driver)
