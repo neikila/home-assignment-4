@@ -35,12 +35,13 @@ class PositiveTests(unittest.TestCase):
         search_page = SearchPage(self.driver)
         search_page.open()
 
-        top_bar = search_page.get_top_bar_form()
-        top_bar.search(self.QUESTION_TITLE_OTHER)
-        top_bar.submit()
+        self.search(search_page, self.QUESTION_TITLE_OTHER)
 
-        side_bar = search_page.get_side_bar_form()
+        side_bar = search_page.get_side_bar_form
         side_bar.set_category(self.OTHER_CATEGORY)
+
+        search_results = search_page.get_search_results_form(self.driver)
+        self.assertTrue(search_results.check_question_exist(self.QUESTION_ID_OTHER))
 
     def test_author(self):
         search_page = SearchPage(self.driver)

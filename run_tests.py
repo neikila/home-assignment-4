@@ -3,7 +3,7 @@
 import sys
 import unittest
 
-from test.question.tests import PositiveTests
+from test.search.tests import *
 
 if __name__ == '__main__':
     suite = unittest.TestSuite((
