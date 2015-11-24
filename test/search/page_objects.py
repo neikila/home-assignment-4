@@ -36,8 +36,8 @@ class SideBarForm(Component):
         self.driver.get(element.get_attribute("href"))
         time.sleep(1)
 
-    def set_period(self, perioud):
-        self.driver.find_element_by_xpath(self.PERIOD % perioud).click()
+    def set_period(self, period):
+        self.driver.find_element_by_xpath(self.PERIOD % period).click()
 
 
 class QuestionForm(Component):
