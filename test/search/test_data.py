@@ -14,6 +14,7 @@ class TestSearch(unittest.TestCase):
 
     QUESTION_ID_OTHER = u"182362166"
     QUESTION_TITLE_OTHER = u"Тестирование длины форм -"
+    QUESTION_TITLE_OTHER_REDUCED = u"Тестирование длины"
     BEST_ANSWER_OTHER = u'длина ответа 3800'
     OTHER_CATEGORY = u'Другое'
 

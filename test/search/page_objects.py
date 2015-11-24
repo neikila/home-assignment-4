@@ -25,6 +25,10 @@ class SideBarForm(Component):
     SUBCATEGORY = "//div[@class='current-category']//a[text()='%s']"
     FILTER_PATTERN = re.compile("https://otvet.mail.ru/search/[a-z]-[0-9]+/.+")
 
+    def __init__(self, driver):
+        super(SideBarForm, self).__init__(driver)
+        self.top_bar = TopToolBarForm(driver)
+
     def get_url(self, xpath):
         WebDriverWait(self.driver, 10).until(
             lambda s: self.FILTER_PATTERN.match(self.driver.find_element_by_xpath(xpath).get_attribute("href")) is not None
@@ -100,9 +104,12 @@ class TopToolBarForm(Component):
 
     def submit(self):
         self.driver.find_element_by_xpath(self.SUBMIT).click()
+        self.wait_for_result_to_load()
+
+    def wait_for_result_to_load(self):
         WebDriverWait(self.driver, self.WAIT_TIME).until(
             lambda s: (EC.element_to_be_clickable((By.XPATH, self.SEARCH_RESULTS_FAIL)) and
-                      len(self.driver.find_element_by_xpath(self.SEARCH_TEXT).text) != 0) or
+                       len(self.driver.find_element_by_xpath(self.SEARCH_TEXT).text) != 0) or
                       (EC.presence_of_element_located((By.XPATH, self.SEARCH_RESULTS_SUCCESS)) and
                        self.PATTERN.match(self.driver.find_element_by_xpath(self.FIRST_QUESTION).get_attribute("href")) is not None)
         )
@@ -157,12 +164,17 @@ class SearchResultsForm(Component):
             lambda s: self.FILTER_PATTERN.match(self.driver.find_element_by_xpath(self.SORT_BY_TIME).get_attribute("href")) is not None
         )
         self.driver.find_element_by_xpath(self.SORT_BY_TIME).click()
+        TopToolBarForm(self.driver).wait_for_result_to_load()
+
 
     def get_questions(self):
         return self.driver.find_elements_by_xpath(self.QUESTIONS)
 
     def get_question_date(self, element):
         return element.find_element_by_xpath(self.DATE).text
+
+    def get_dates(self):
+        return self.driver.find_elements_by_xpath("//div[contains(@class, 'item__stats')]/div[2]")
 
 class Page(object):
     BASE_URL = 'https://otvet.mail.ru/'

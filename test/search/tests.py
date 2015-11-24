@@ -7,6 +7,36 @@ from test_data import TestSearch
 class PositiveTests(TestSearch):
     YEAR = u"год"
 
+    time_dictionary = {
+        u'ми': 0,
+        u'ча': 1,
+        u'дн': 2,
+        u'де': 2,
+        u'не': 3,
+        u'ме': 4,
+        u'ле': 5,
+        u'го': 6
+    }
+
+    def convert(self, time_word):
+        return self.time_dictionary[time_word[0:2]]
+
+    def is_first_less_than_second(self, first, second):
+        if first[1] < second[1]:
+            return True
+        elif first[1] == second[1] and first[0] <= second[0]:
+            return True
+        else:
+            return False
+
+    def parse_str_to_tuple(self, data_str):
+        array = data_str.split(' ')
+        try:
+            first = int(array[1])
+            return first, self.convert(array[2])
+        except ValueError:
+            return 1, self.convert(array[1])
+
     def test_author(self):
         search_page = SearchPage(self.driver)
         search_page.open()
@@ -101,18 +131,21 @@ class PositiveTests(TestSearch):
         search_page = SearchPage(self.driver)
         search_page.open()
 
-        self.search(search_page, self.QUESTION_TITLE_OTHER)
+        self.search(search_page, self.QUESTION_TITLE_OTHER_REDUCED)
         search_results = search_page.get_search_results_form
         search_results.set_sort_by_time()
 
-        elements = search_results.get_questions()
-        old_element = search_results.get_question_date(elements[0])
-        old_number = int(re.search(r'\d+', old_element).group()) #Судя по тестам в терминале не работает
-        #old_type
-        for elem in elements:
-            new_time = search_results.get_question_date(elem)
-            #TODO сравннение времени
+        elements = search_results.get_dates()
+        last_time = self.parse_str_to_tuple(elements[0].text)
+        result = True
+        for i in range(1, len(elements)):
+            new_time = self.parse_str_to_tuple(elements[i].text)
+            result = self.is_first_less_than_second(last_time, new_time)
+            if not result:
+                break
             last_time = new_time
+
+        self.assertTrue(result)
 
 
 class NegativeTests(TestSearch):
