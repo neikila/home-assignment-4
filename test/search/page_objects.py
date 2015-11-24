@@ -99,7 +99,7 @@ class QuestionInSearchForm(Component):
         self.xpath = xpath
         self.TITLE = xpath + "/a[contains(@class, 'item__text')]"
         self.AUTHOR = xpath + "/div[@class='item__stats']/a[contains(@href, 'profile')]"
-        self.CATEGORY = xpath + "//span[contains(@class, 'item__stat item__stat')]"
+        self.CATEGORY = xpath + "/div[@class='item__stats']/a[2]"
         self.LINK = xpath + "//a[contains(@class, 'item__answer')]"
 
     def wait(self):
@@ -114,7 +114,7 @@ class QuestionInSearchForm(Component):
         return self.driver.find_element_by_xpath(self.AUTHOR).text
 
     def get_category(self):
-        return self.driver.find_element_by_xpath(self.CATEGORY).text
+        return self.driver.find_element_by_xpath(self.CATEGORY).text[1:-1]
 
     # Да одно и то же, но смысл разный, и понятно, что достаем из формы
     def get_subcategory(self):

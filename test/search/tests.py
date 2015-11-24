@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from test.search.page_objects import *
-
+import time
 
 class PositiveTests(unittest.TestCase):
     QUESTION_ID_PROGRAMMING = u"184484161"
@@ -31,7 +31,25 @@ class PositiveTests(unittest.TestCase):
             desired_capabilities=getattr(DesiredCapabilities, browser)
                 .copy()
         )
-    
+
+    def test_author(self):
+        search_page = SearchPage(self.driver)
+        search_page.open()
+        results_form = self.search(search_page, self.QUESTION_TITLE_OTHER)
+        results_form.get_question_form(self.QUESTION_ID_OTHER)
+
+        question_form = results_form.get_question_form(self.QUESTION_ID_OTHER)
+        self.assertEquals(question_form.get_author(), self.USERNAME)
+
+    def test_category(self):
+        search_page = SearchPage(self.driver)
+        search_page.open()
+        results_form = self.search(search_page, self.QUESTION_TITLE_OTHER)
+        results_form.get_question_form(self.QUESTION_ID_OTHER)
+
+        question_form = results_form.get_question_form(self.QUESTION_ID_OTHER)
+        self.assertEquals(question_form.get_category(), self.OTHER_CATEGORY)
+
     def test_category_search(self):
         search_page = SearchPage(self.driver)
         search_page.open()
@@ -44,11 +62,3 @@ class PositiveTests(unittest.TestCase):
         search_results = search_page.get_search_results_form
         self.assertTrue(search_results.check_question_exist(self.QUESTION_ID_OTHER))
 
-    def test_author(self):
-        search_page = SearchPage(self.driver)
-        search_page.open()
-        results_form = self.search(search_page, self.QUESTION_TITLE_OTHER)
-        results_form.get_question_form(self.QUESTION_ID_OTHER)
-
-        question_form = results_form.get_question_form(self.QUESTION_ID_OTHER)
-        self.assertEquals(question_form.get_author(), self.USERNAME)
