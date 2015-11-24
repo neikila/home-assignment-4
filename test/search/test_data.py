@@ -7,12 +7,14 @@ class TestSearch(unittest.TestCase):
     QUESTION_ID_PROGRAMMING = u"184484161"
     QUESTION_TITLE_PROGRAMMING = u"I hope now it is long enough? You need more symbols, really? " \
                                  u"WTF How much do you need? Да вы блин серьезно?!"
+    QUESTION_DESCRIPTION_PROGRAMMING = u"Very strange. I need MORE description! Are you serious?"
     PROG_CATEGORY = u'Программирование'
     PYTHON_SUBCATEGORY = u'Python'
     USERNAME = u'Артур Пирожков'
 
     QUESTION_ID_OTHER = u"182362166"
     QUESTION_TITLE_OTHER = u"Тестирование длины форм -"
+    BEST_ANSWER_OTHER = u'длина ответа 3800'
     OTHER_CATEGORY = u'Другое'
 
     def search(self, page, search_request):
