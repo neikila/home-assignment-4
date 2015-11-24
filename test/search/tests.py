@@ -52,6 +52,14 @@ class PositiveTests(TestSearch):
         question_form = results_form.get_question_form(self.QUESTION_ID_OTHER)
         self.assertEquals(question_form.get_title(), self.QUESTION_TITLE_OTHER)
 
+    def test_accurate_search(self):
+        search_page = SearchPage(self.driver)
+        search_page.open()
+        results_form = self.accurate_search(search_page, self.QUESTION_TITLE_OTHER)
+
+        question_form = results_form.get_question_form(self.QUESTION_ID_OTHER)
+        self.assertEquals(question_form.get_title(), self.QUESTION_TITLE_OTHER)
+
     def test_category_search(self):
         search_page = SearchPage(self.driver)
         search_page.open()
@@ -87,7 +95,7 @@ class PositiveTests(TestSearch):
         side_bar.set_period(self.YEAR)
 
         search_results = search_page.get_search_results_form
-        self.assertTrue(search_results.check_question_exist(self.QUESTION_ID_PROGRAMMING))
+        self.assertTrue(search_results.check_question_exist(self.QUESTION_ID_OTHER))
 
 
 class NegativeTests(TestSearch):

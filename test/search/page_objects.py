@@ -23,22 +23,22 @@ class SideBarForm(Component):
     PERIOD = "id('ColumnLeft')/div/a[text()='%s']"
     CATEGORY = "//div[@class='current-category']//a[text()='%s']"
     SUBCATEGORY = "//div[@class='current-category']//a[text()='%s']"
-    category_pattern = re.compile("https://otvet.mail.ru/search/c-[0-9]+/.+")
+    FILTER_PATTERN = re.compile("https://otvet.mail.ru/search/[a-z]-[0-9]+/.+")
 
-    def get_category_url(self, xpath):
+    def get_url(self, xpath):
         WebDriverWait(self.driver, 10).until(
-            lambda s: self.category_pattern.match(self.driver.find_element_by_xpath(xpath).get_attribute("href")) is not None
+            lambda s: self.FILTER_PATTERN.match(self.driver.find_element_by_xpath(xpath).get_attribute("href")) is not None
         )
         return self.driver.find_element_by_xpath(xpath).get_attribute("href")
 
     def set_category(self, category_name):
-        self.driver.get(self.get_category_url(self.CATEGORY % category_name))
+        self.driver.get(self.get_url(self.CATEGORY % category_name))
 
     def set_subcategory(self, subcategory_name):
-        self.driver.get(self.get_category_url(self.SUBCATEGORY % subcategory_name))
+        self.driver.get(self.get_url(self.SUBCATEGORY % subcategory_name))
 
     def set_period(self, period):
-        self.driver.find_element_by_xpath(self.PERIOD % period).click()
+        self.driver.get(self.get_url(self.PERIOD % period))
 
 
 class QuestionForm(Component):
@@ -90,8 +90,11 @@ class TopToolBarForm(Component):
     SEARCH_TEXT = "//input[contains(@class, 'pm-toolbar__search__input')]"
     SUBMIT = "//button[contains(@class, 'js-submit-button')]"
     SEARCH_RESULTS_SUCCESS = "//div[@class='page-search']/div[@class='search-info']//b"
-    SEARCH_RESULTS_FAIL = "//div[@class='search-page']"
+    SEARCH_RESULTS_FAIL = "//div[@class='search-page']/p[contains(@class, 'smallBull')]"
     WAIT_TIME = 10
+    pattern = re.compile("https://otvet.mail.ru/question/[0-9]+")
+    FIRST_QUESTION = "//div[@class='search-component']/div/div/a[2]"
+
 
     def search(self, text):
         self.driver.find_element_by_xpath(self.SEARCH_TEXT).send_keys(text)
@@ -99,7 +102,10 @@ class TopToolBarForm(Component):
     def submit(self):
         self.driver.find_element_by_xpath(self.SUBMIT).click()
         WebDriverWait(self.driver, self.WAIT_TIME).until(
-            EC.presence_of_element_located((By.XPATH, self.SEARCH_RESULTS_SUCCESS + '|' + self.SEARCH_RESULTS_FAIL))
+            lambda s: (EC.element_to_be_clickable((By.XPATH, self.SEARCH_RESULTS_FAIL)) and
+                      len(self.driver.find_element_by_xpath(self.SEARCH_TEXT).text) != 0) or
+                      (EC.presence_of_element_located((By.XPATH, self.SEARCH_RESULTS_SUCCESS)) and
+            self.pattern.match(self.driver.find_element_by_xpath(self.FIRST_QUESTION).get_attribute("href")) is not None)
         )
 
 
@@ -112,11 +118,6 @@ class QuestionInSearchForm(Component):
         self.AUTHOR = xpath + "/div[@class='item__stats']/a[contains(@href, 'profile')]"
         self.CATEGORY = xpath + "/div[@class='item__stats']/a[2]"
         self.LINK = xpath + "//a[contains(@class, 'item__answer')]"
-
-    def wait(self):
-        WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, self.xpath))
-        )
 
     def get_title(self):
         return self.driver.find_element_by_xpath(self.TITLE).text
@@ -138,21 +139,18 @@ class SearchResultsForm(Component):
     MORE = "//button[contains(@class, 'btn-more')]"
     WAIT_TIME = 10
 
-    def get_question_form(self, id):
-        question_form = QuestionInSearchForm(self.driver, self.QUESTION_SELECTOR % id)
-        question_form.wait()
+    def get_question_form(self, q_id):
+        question_form = QuestionInSearchForm(self.driver, self.QUESTION_SELECTOR % q_id)
         return question_form
 
     def more_questions(self):
         self.driver.find_element_by_xpath(self.MORE).click()
 
-    def check_question_exist(self, id):
+    def check_question_exist(self, q_id):
         try:
-            WebDriverWait(self.driver, self.WAIT_TIME).until(
-                EC.presence_of_element_located((By.XPATH, self.QUESTION_SELECTOR % id))
-            )
+            self.driver.find_element_by_xpath(self.QUESTION_SELECTOR % q_id)
             return True
-        except TimeoutException:
+        except:
             return False
 
 
