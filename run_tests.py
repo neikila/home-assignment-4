@@ -3,7 +3,7 @@
 import unittest
 import sys
 import unittest
-from test.tests import PositiveTests
+from test.testsForQuestionCreation import PositiveTests
 
 
 if __name__ == '__main__':
