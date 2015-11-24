@@ -150,7 +150,7 @@ class SearchPage(Page):
     PATH = '/search'
 
     @property
-    def get_tool_bar_form(self):
+    def get_top_bar_form(self):
         return TopToolBarForm(self.driver)
 
     @property

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from test.question.page_objects import *
+from test.search.page_objects import *
 
 
 class PositiveTests(unittest.TestCase):
@@ -10,6 +10,7 @@ class PositiveTests(unittest.TestCase):
     USERNAME = u'Артур Пирожков'
 
     QUESTION_ID_OTHER = u"182362166"
+    QUESTION_TITLE_OTHER = u"\"Тестирование длины форм -\""
     OTHER_CATEGORY = u'Другое'
 
     def tearDown(self):
@@ -25,4 +26,10 @@ class PositiveTests(unittest.TestCase):
                 .copy()
         )
         self.auth()
+
+    def test_category(self):
+        search_page = SearchPage(self.driver)
+        top_bar = search_page.get_top_bar_form()
+        top_bar.search(self.QUESTION_TITLE_OTHER)
+        top_bar.submit()
 
