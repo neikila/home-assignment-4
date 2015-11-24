@@ -15,7 +15,7 @@ class Component(object):
         self.driver = driver
 
 
-class ColumnLeft(Component):
+class SideBarForm(Component):
     PERIOD = "id('ColumnLeft')/div/a[text()='%s']"
     CATEGORY = "//div[@class='current-category']//a[text()='%s']"
     SUBCATEGORY = "//div[@class='current-category']//a[text()='%s']"
@@ -115,7 +115,6 @@ class SearchResultsForm(Component):
         return QuestionInSearchForm(self.driver, self.QUESTION_SELECTOR % id)
 
 
-
 class Page(object):
     BASE_URL = 'https://otvet.mail.ru/'
     PATH = ''
@@ -143,9 +142,13 @@ class QuestionPage(Page):
         return question_form
 
 
-class MainPage(Page):
-    PATH = ''
+class SearchPage(Page):
+    PATH = '/search'
 
     @property
-    def form(self):
+    def get_tool_bar_form(self):
         return TopToolBarForm(self.driver)
+
+    @property
+    def get_side_bar_form(self):
+        return SideBarForm(self.driver)
