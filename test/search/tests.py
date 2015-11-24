@@ -5,6 +5,8 @@ import time
 
 class PositiveTests(unittest.TestCase):
     QUESTION_ID_PROGRAMMING = u"184484161"
+    QUESTION_TITLE_PROGRAMMING = u"I hope now it is long enough? You need more symbols, really? " \
+                                 u"WTF How much do you need? Да вы блин серьезно?!"
     PROG_CATEGORY = u'Программирование'
     PYTHON_SUBCATEGORY = u'Python'
     USERNAME = u'Артур Пирожков'
@@ -49,6 +51,15 @@ class PositiveTests(unittest.TestCase):
 
         question_form = results_form.get_question_form(self.QUESTION_ID_OTHER)
         self.assertEquals(question_form.get_category(), self.OTHER_CATEGORY)
+
+    def test_subcategory(self):
+        search_page = SearchPage(self.driver)
+        search_page.open()
+        results_form = self.search(search_page, self.QUESTION_TITLE_PROGRAMMING)
+        results_form.get_question_form(self.QUESTION_ID_PROGRAMMING)
+
+        question_form = results_form.get_question_form(self.QUESTION_ID_PROGRAMMING)
+        self.assertEquals(question_form.get_category(), self.PYTHON_SUBCATEGORY)
 
     def test_category_search(self):
         search_page = SearchPage(self.driver)
