@@ -92,7 +92,7 @@ class TopToolBarForm(Component):
     SEARCH_RESULTS_SUCCESS = "//div[@class='page-search']/div[@class='search-info']//b"
     SEARCH_RESULTS_FAIL = "//div[@class='search-page']/p[contains(@class, 'smallBull')]"
     WAIT_TIME = 10
-    pattern = re.compile("https://otvet.mail.ru/question/[0-9]+")
+    PATTERN = re.compile("https://otvet.mail.ru/question/[0-9]+")
     FIRST_QUESTION = "//div[@class='search-component']/div/div/a[2]"
 
     def search(self, text):
@@ -104,7 +104,7 @@ class TopToolBarForm(Component):
             lambda s: (EC.element_to_be_clickable((By.XPATH, self.SEARCH_RESULTS_FAIL)) and
                       len(self.driver.find_element_by_xpath(self.SEARCH_TEXT).text) != 0) or
                       (EC.presence_of_element_located((By.XPATH, self.SEARCH_RESULTS_SUCCESS)) and
-            self.pattern.match(self.driver.find_element_by_xpath(self.FIRST_QUESTION).get_attribute("href")) is not None)
+                       self.PATTERN.match(self.driver.find_element_by_xpath(self.FIRST_QUESTION).get_attribute("href")) is not None)
         )
 
 
@@ -136,6 +136,7 @@ class SearchResultsForm(Component):
     SORT_BY_TIME = "//a[text()='По дате']"
     QUESTIONS = QUESTIONS_LIST + "/div[contains(@class, 'item_similiar')]"
     DATE = "//div[@class='item__stats']/div[2]"
+    FILTER_PATTERN = re.compile("https://otvet.mail.ru/search/([a-z]-[0-9]+/)?s-date/.+")
 
     def get_question_form(self, q_id):
         question_form = QuestionInSearchForm(self.driver, self.QUESTION_SELECTOR % q_id)
@@ -152,7 +153,9 @@ class SearchResultsForm(Component):
             return False
 
     def set_sort_by_time(self):
-        # TODO
+        WebDriverWait(self.driver, 10).until(
+            lambda s: self.FILTER_PATTERN.match(self.driver.find_element_by_xpath(self.SORT_BY_TIME).get_attribute("href")) is not None
+        )
         self.driver.find_element_by_xpath(self.SORT_BY_TIME).click()
 
     def get_questions(self):
