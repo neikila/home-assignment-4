@@ -84,6 +84,23 @@ class PositiveTests(TestSearch):
         search_results = search_page.get_search_results_form
         self.assertTrue(search_results.check_question_exist(self.QUESTION_ID_OTHER))
 
+    def test_sort_by_time(self):
+        search_page = SearchPage(self.driver)
+        search_page.open()
+
+        self.search(search_page, self.QUESTION_TITLE_OTHER)
+        search_results = search_page.get_search_results_form
+        search_results.set_sort_by_time()
+
+        elements = search_results.get_questions()
+        old_element = search_results.get_question_date(elements[0])
+        old_number = int(re.search(r'\d+', old_element).group()) #Судя по тестам в терминале не работает
+        #old_type
+        for elem in elements:
+            new_time = search_results.get_question_date(elem)
+            #TODO сравннение времени
+            last_time = new_time
+
 
 class NegativeTests(TestSearch):
     JAVA_SUBCATEGORY = u"Java"
