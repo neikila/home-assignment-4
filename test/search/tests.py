@@ -144,8 +144,21 @@ class PositiveTests(TestSearch):
             if not result:
                 break
             last_time = new_time
+        self.assertTrue(result)
 
         self.assertTrue(result)
+
+    def test_check_number_of_answers(self):
+        search_page = SearchPage(self.driver)
+        search_page.open()
+
+        self.accurate_search(search_page, self.QUESTION_TITLE_OTHER)
+        search_results = search_page.get_search_results_form
+        question = search_results.get_question_form(self.QUESTION_ID_OTHER)
+        answers = question.get_answers()
+        answers = int(answers.split()[0])
+        question_form = question.go_to_question_page_and_get_form()
+        self.assertEqual(answers, question_form.get_number_of_answers())
 
 
 class NegativeTests(TestSearch):

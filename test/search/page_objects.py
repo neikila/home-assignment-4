@@ -46,37 +46,10 @@ class SideBarForm(Component):
 
 
 class QuestionForm(Component):
-    QUESTION = "//*[contains(@class,'q--qtext')]/index"
-    QUESTION_DESCRIPTION = "//*[contains(@class,'q--qcomment')]"
-    USERNAME = "//*[contains(@class,'q--user')]/b"
-    QUESTION_FIELD = "//*[contains(@class,'page-question')]"
-    DELETE = "//button[@data-type='delete-question']"
-    CATEGORY = "//a[contains(@class,'list__title')]/span[@itemprop='title']"
-    SUBCATEGORY = "//a[contains(@class,'selected')]/span[@itemprop='title']"
-    WAIT_TIME = 10
+    ANSWERS = "//div[@class='container-for-answers']/div[contains(@class, ' answer')]"
 
-    def wait(self):
-        WebDriverWait(self.driver, self.WAIT_TIME).until(
-            EC.presence_of_element_located((By.XPATH, self.QUESTION_FIELD))
-        )
-
-    def get_question(self):
-        return self.driver.find_element_by_xpath(self.QUESTION).text
-
-    def get_question_description(self):
-        return self.driver.find_element_by_xpath(self.QUESTION_DESCRIPTION).text
-
-    def get_username(self):
-        return self.driver.find_element_by_xpath(self.USERNAME).text
-
-    def delete(self):
-        self.driver.find_element_by_xpath(self.DELETE).click()
-
-    def get_category(self):
-        return self.driver.find_element_by_xpath(self.CATEGORY).text
-
-    def get_subcategory(self):
-        return self.driver.find_element_by_xpath(self.SUBCATEGORY).text
+    def get_number_of_answers(self):
+        return self.driver.find_elements_by_xpath(self.ANSWERS).__len__()
 
 
 class ProfileListForm(Component):
@@ -124,6 +97,7 @@ class QuestionInSearchForm(Component):
         self.AUTHOR = xpath + "/div[@class='item__stats']/a[contains(@href, 'profile')]"
         self.CATEGORY = xpath + "/div[@class='item__stats']/a[2]"
         self.LINK = xpath + "//a[contains(@class, 'item__answer')]"
+        self.ANSWERS = self.LINK + "/span"
 
     def get_title(self):
         return self.driver.find_element_by_xpath(self.TITLE).text
@@ -133,6 +107,14 @@ class QuestionInSearchForm(Component):
 
     def get_category(self):
         return self.driver.find_element_by_xpath(self.CATEGORY).text[1:-1]
+
+    def get_answers(self):
+        return self.driver.find_element_by_xpath(self.ANSWERS).text
+
+    def go_to_question_page_and_get_form(self):
+        link = self.driver.find_element_by_xpath(self.LINK).get_attribute("href")
+        self.driver.get(link)
+        return QuestionForm(self.driver)
 
 
 class SearchResultsForm(Component):
