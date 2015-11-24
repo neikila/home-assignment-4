@@ -123,6 +123,11 @@ class SearchResultsForm(Component):
     def more_questions(self):
         self.driver.find_element_by_xpath(self.MORE).click()
 
+    def check_question_exist(self, id):
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, self.QUESTION_SELECTOR % id))
+        )
+
 
 class Page(object):
     BASE_URL = 'https://otvet.mail.ru/'
