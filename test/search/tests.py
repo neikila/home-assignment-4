@@ -27,9 +27,13 @@ class PositiveTests(unittest.TestCase):
         )
         self.auth()
 
-    def test_category(self):
+    def test_category_search(self):
         search_page = SearchPage(self.driver)
+        search_page.open()
+
         top_bar = search_page.get_top_bar_form()
         top_bar.search(self.QUESTION_TITLE_OTHER)
         top_bar.submit()
 
+        side_bar = search_page.get_side_bar_form()
+        side_bar.set_category(self.OTHER_CATEGORY)
