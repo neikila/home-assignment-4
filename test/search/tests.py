@@ -5,6 +5,8 @@ from test_data import TestSearch
 
 
 class PositiveTests(TestSearch):
+    YEAR = u"год"
+
     def tearDown(self):
         # pass
         self.driver.quit()
@@ -75,9 +77,22 @@ class PositiveTests(TestSearch):
         search_results = search_page.get_search_results_form
         self.assertTrue(search_results.check_question_exist(self.QUESTION_ID_PROGRAMMING))
 
+    def test_time_gate(self):
+        search_page = SearchPage(self.driver)
+        search_page.open()
+
+        self.accurate_search(search_page, self.QUESTION_TITLE_OTHER)
+
+        side_bar = search_page.get_side_bar_form
+        side_bar.set_period(self.YEAR)
+
+        search_results = search_page.get_search_results_form
+        self.assertTrue(search_results.check_question_exist(self.QUESTION_ID_PROGRAMMING))
+
 
 class NegativeTests(TestSearch):
     JAVA_SUBCATEGORY = u"Java"
+    MONTH = u"месяц"
 
     def tearDown(self):
         # pass
@@ -113,6 +128,18 @@ class NegativeTests(TestSearch):
         side_bar = search_page.get_side_bar_form
         side_bar.set_category(self.PROG_CATEGORY)
         side_bar.set_subcategory(self.JAVA_SUBCATEGORY)
+
+        search_results = search_page.get_search_results_form
+        self.assertFalse(search_results.check_question_exist(self.QUESTION_ID_PROGRAMMING))
+
+    def test_wrong_time_gate(self):
+        search_page = SearchPage(self.driver)
+        search_page.open()
+
+        self.accurate_search(search_page, self.QUESTION_TITLE_OTHER)
+
+        side_bar = search_page.get_side_bar_form
+        side_bar.set_period(self.MONTH)
 
         search_results = search_page.get_search_results_form
         self.assertFalse(search_results.check_question_exist(self.QUESTION_ID_PROGRAMMING))

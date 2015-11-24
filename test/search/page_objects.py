@@ -37,8 +37,8 @@ class SideBarForm(Component):
     def set_subcategory(self, subcategory_name):
         self.driver.get(self.get_category_url(self.SUBCATEGORY % subcategory_name))
 
-    def set_period(self, perioud):
-        self.driver.find_element_by_xpath(self.PERIOD % perioud).click()
+    def set_period(self, period):
+        self.driver.find_element_by_xpath(self.PERIOD % period).click()
 
 
 class QuestionForm(Component):
