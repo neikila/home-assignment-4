@@ -31,7 +31,10 @@ class SideBarForm(Component):
         # ActionChains(self.driver).move_to_element(element).click(element).perform()
 
     def set_subcategory(self, subcategory_name):
-        self.driver.find_element_by_xpath(self.SUBCATEGORY % subcategory_name).click()
+        time.sleep(1)
+        element = self.driver.find_element_by_xpath(self.SUBCATEGORY % subcategory_name)
+        self.driver.get(element.get_attribute("href"))
+        time.sleep(1)
 
     def set_period(self, perioud):
         self.driver.find_element_by_xpath(self.PERIOD % perioud).click()

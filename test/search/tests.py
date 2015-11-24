@@ -60,7 +60,6 @@ class PositiveTests(unittest.TestCase):
         results_form = self.accurate_search(search_page, self.QUESTION_TITLE_PROGRAMMING)
 
         question_form = results_form.get_question_form(self.QUESTION_ID_PROGRAMMING)
-        time.sleep(10)
         self.assertEquals(question_form.get_category(), self.PYTHON_SUBCATEGORY)
 
     def test_question_text(self):
@@ -83,3 +82,15 @@ class PositiveTests(unittest.TestCase):
         search_results = search_page.get_search_results_form
         self.assertTrue(search_results.check_question_exist(self.QUESTION_ID_OTHER))
 
+    def test_subcategory_search(self):
+        search_page = SearchPage(self.driver)
+        search_page.open()
+
+        self.search(search_page, self.QUESTION_TITLE_PROGRAMMING)
+
+        side_bar = search_page.get_side_bar_form
+        side_bar.set_category(self.PROG_CATEGORY)
+        side_bar.set_subcategory(self.PYTHON_SUBCATEGORY)
+
+        search_results = search_page.get_search_results_form
+        self.assertTrue(search_results.check_question_exist(self.QUESTION_ID_PROGRAMMING))
