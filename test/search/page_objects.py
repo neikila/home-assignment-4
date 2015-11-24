@@ -76,12 +76,17 @@ class ProfileListForm(Component):
 class TopToolBarForm(Component):
     SEARCH_TEXT = "//input[contains(@class, 'pm-toolbar__search__input')]"
     SUBMIT = "//button[contains(@class, 'js-submit-button')]"
+    SEARCH_RESULTS_SUCCESS = "//div[@class='page-search']/div[@class='search-info']//b"
+    SEARCH_RESULTS_FAIL = "//div[@class='search-page']"
 
     def search(self, text):
         self.driver.find_element_by_xpath(self.SEARCH_TEXT).send_keys(text)
 
     def submit(self):
         self.driver.find_element_by_xpath(self.SUBMIT).click()
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, self.SEARCH_RESULTS_SUCCESS + '|' + self.SEARCH_RESULTS_FAIL))
+        )
 
 
 class QuestionInSearchForm(Component):

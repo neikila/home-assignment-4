@@ -17,6 +17,7 @@ class PositiveTests(unittest.TestCase):
         top_bar = page.get_top_bar_form
         top_bar.search(search_request)
         top_bar.submit()
+        return page.get_search_results_form
 
     def tearDown(self):
         # pass
@@ -45,6 +46,5 @@ class PositiveTests(unittest.TestCase):
     def test_author(self):
         search_page = SearchPage(self.driver)
         search_page.open()
-
-        self.search(search_page, self.QUESTION_TITLE_OTHER)
-
+        results_form = self.search(search_page, self.QUESTION_TITLE_OTHER)
+        results_form.get_question_form(self.QUESTION_ID_OTHER)
