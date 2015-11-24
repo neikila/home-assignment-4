@@ -13,7 +13,7 @@ class PositiveTests(unittest.TestCase):
     USERNAME = u'Артур Пирожков'
 
     QUESTION_ID_OTHER = u"182362166"
-    QUESTION_TITLE_OTHER = u"\"Тестирование длины форм -\""
+    QUESTION_TITLE_OTHER = u"Тестирование длины форм -"
     OTHER_CATEGORY = u'Другое'
 
     def search(self, page, search_request):
@@ -21,6 +21,9 @@ class PositiveTests(unittest.TestCase):
         top_bar.search(search_request)
         top_bar.submit()
         return page.get_search_results_form
+
+    def accurate_search(self, page, search_request):
+        return self.search(page, '\"' + search_request + '\"')
 
     def tearDown(self):
         # pass
@@ -38,8 +41,7 @@ class PositiveTests(unittest.TestCase):
     def test_author(self):
         search_page = SearchPage(self.driver)
         search_page.open()
-        results_form = self.search(search_page, self.QUESTION_TITLE_OTHER)
-        results_form.get_question_form(self.QUESTION_ID_OTHER)
+        results_form = self.accurate_search(search_page, self.QUESTION_TITLE_OTHER)
 
         question_form = results_form.get_question_form(self.QUESTION_ID_OTHER)
         self.assertEquals(question_form.get_author(), self.USERNAME)
@@ -47,8 +49,7 @@ class PositiveTests(unittest.TestCase):
     def test_category(self):
         search_page = SearchPage(self.driver)
         search_page.open()
-        results_form = self.search(search_page, self.QUESTION_TITLE_OTHER)
-        results_form.get_question_form(self.QUESTION_ID_OTHER)
+        results_form = self.accurate_search(search_page, self.QUESTION_TITLE_OTHER)
 
         question_form = results_form.get_question_form(self.QUESTION_ID_OTHER)
         self.assertEquals(question_form.get_category(), self.OTHER_CATEGORY)
@@ -56,17 +57,24 @@ class PositiveTests(unittest.TestCase):
     def test_subcategory(self):
         search_page = SearchPage(self.driver)
         search_page.open()
-        results_form = self.search(search_page, self.QUESTION_TITLE_PROGRAMMING)
-        results_form.get_question_form(self.QUESTION_ID_PROGRAMMING)
+        results_form = self.accurate_search(search_page, self.QUESTION_TITLE_PROGRAMMING)
 
         question_form = results_form.get_question_form(self.QUESTION_ID_PROGRAMMING)
         self.assertEquals(question_form.get_category(), self.PYTHON_SUBCATEGORY)
+
+    def test_question_text(self):
+        search_page = SearchPage(self.driver)
+        search_page.open()
+        results_form = self.accurate_search(search_page, self.QUESTION_TITLE_OTHER)
+
+        question_form = results_form.get_question_form(self.QUESTION_ID_OTHER)
+        self.assertEquals(question_form.get_title(), self.QUESTION_TITLE_OTHER)
 
     def test_category_search(self):
         search_page = SearchPage(self.driver)
         search_page.open()
 
-        self.search(search_page, self.QUESTION_TITLE_OTHER)
+        self.accurate_search(search_page, self.QUESTION_TITLE_OTHER)
 
         side_bar = search_page.get_side_bar_form
         side_bar.set_category(self.OTHER_CATEGORY)
