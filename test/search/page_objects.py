@@ -156,3 +156,7 @@ class SearchPage(Page):
     @property
     def get_side_bar_form(self):
         return SideBarForm(self.driver)
+
+    @property
+    def get_search_results_form(self):
+        return SearchResultsForm(self.driver)
