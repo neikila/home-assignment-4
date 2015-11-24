@@ -8,6 +8,7 @@ from selenium.webdriver import DesiredCapabilities, Remote
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
 
 
@@ -126,9 +127,13 @@ class SearchResultsForm(Component):
         self.driver.find_element_by_xpath(self.MORE).click()
 
     def check_question_exist(self, id):
-        WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, self.QUESTION_SELECTOR % id))
-        )
+        try:
+            WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, self.QUESTION_SELECTOR % id))
+            )
+            return True
+        except TimeoutException:
+            return False
 
 
 class Page(object):
