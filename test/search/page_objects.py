@@ -15,6 +15,21 @@ class Component(object):
         self.driver = driver
 
 
+class ColumnLeft(Component):
+    PERIOD = "id('ColumnLeft')/div/a[text()='%s']"
+    CATEGORY = "//div[@class='current-category']//a[text()='%s']"
+    SUBCATEGORY = "//div[@class='current-category']//a[text()='%s']"
+
+    def set_category(self, category_name):
+        self.driver.find_element_by_xpath(self.CATEGORY % category_name).click()
+
+    def set_subcategory(self, subcategory_name):
+        self.driver.find_element_by_xpath(self.SUBCATEGORY % subcategory_name).click()
+
+    def set_period(self, perioud):
+        self.driver.find_element_by_xpath(self.PERIOD % perioud).click()
+
+
 class QuestionForm(Component):
     QUESTION = "//*[contains(@class,'q--qtext')]/index"
     QUESTION_DESCRIPTION = "//*[contains(@class,'q--qcomment')]"
