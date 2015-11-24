@@ -3,6 +3,7 @@
 from test.search.page_objects import *
 import time
 
+
 class PositiveTests(unittest.TestCase):
     QUESTION_ID_PROGRAMMING = u"184484161"
     QUESTION_TITLE_PROGRAMMING = u"I hope now it is long enough? You need more symbols, really? " \
