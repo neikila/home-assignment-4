@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from page_objects import *
-import time
+from test.question.page_objects import *
 
 
 class PositiveTests(unittest.TestCase):

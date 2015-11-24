@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import unittest
 import sys
 import unittest
-from test.testsForQuestionCreation import PositiveTests
 
+from test.question.tests import PositiveTests
 
 if __name__ == '__main__':
     suite = unittest.TestSuite((
