@@ -4,16 +4,8 @@ from test.question.page_objects import *
 
 
 class PositiveTests(unittest.TestCase):
-    USEREMAIL = 'artur.pirozhkov.like.a.boss@mail.ru'
-    PASSWORD = 'testirovanie'
-    QUESTION = u'I hope now it is long enough? You need more symbols, really? WTF How much do you need? ' \
-               u'Да вы блин серьезно?!'
-    DESCRIPTION = u'Very strange. I need MORE description!\n' \
-                  u'Are you serious?'
-    FOTO = 'http://uu.appsforall.ru/542ee0c9be4f73.01671974.jpg'
-    VIDEO = 'https://cloclo24.datacloudmail.ru/weblink/view/Gpdt/BnymkS35Q?etag=65D1C4B510DF51FF36E413F340F21E8FC45F4D58'
     CATEGORY = u'Программирование'
-    SUBCATEGORY = 'Python'
+    SUBCATEGORY = u'Python'
     USERNAME = u'Артур Пирожков'
 
     def auth(self):

@@ -84,22 +84,37 @@ class TopToolBarForm(Component):
         self.driver.find_element_by_xpath(self.SUBMIT).click()
 
 
+class QuestionInSearchForm(Component):
+
+    def __init__(self, driver, xpath):
+        super(QuestionInSearchForm, self).__init__(driver)
+        self.TITLE = xpath + "/a[contains(@class, 'item__text')]"
+        self.AUTHOR = xpath + "/div[@class='item__stats']/a[contains(@href, 'profile')]"
+        self.CATEGORY = xpath + "//span[contains(@class, 'item__stat item__stat')]"
+        self.LINK = xpath + "//a[contains(@class, 'item__answer')]"
+
+    def get_title(self):
+        return self.driver.find_element_by_xpath(self.TITLE).text
+
+    def get_author(self):
+        return self.driver.find_element_by_xpath(self.AUTHOR).text
+
+    def get_category(self):
+        return self.driver.find_element_by_xpath(self.CATEGORY).text
+
+    # Да одно и то же, но смысл разный, и понятно, что достаем из формы
+    def get_subcategory(self):
+        return self.driver.find_element_by_xpath(self.CATEGORY).text
+
+
 class SearchResultsForm(Component):
     QUESTIONS_LIST = "//div[contains(@class, 'list bordered')]"
     QUESTION_SELECTOR = QUESTIONS_LIST + "/div[./a[@href='/question/%s']]"
-    QUESTION_TITLE = QUESTIONS_LIST + "//a[contains(@class, 'item__text') and text()=%s]"
-    QUESTION_AUTHOR = QUESTIONS_LIST + "//a[contains(@class, 'item__stat item__stat') and text()=%s]"
-    QUESTION_CATEGORY = QUESTIONS_LIST + "//span[contains(@class, 'item__stat item__stat') and contains(text(), %s)]"
-    QUESTION_LINK = QUESTIONS_LIST + "//a[contains(@class, 'item__answer')]"
 
-    def get_question(self, id):
-        return self.driver.find_element_by_xpath(self.QUESTION_SELECTOR)
+    def get_question_form(self, id):
+        return QuestionInSearchForm(self.driver, self.QUESTION_SELECTOR % id)
 
-    def check_title(self, title):
-        return EC.presence_of_all_elements_located((By.XPATH, self.QUESTION_TITLE % title))
 
-    def check_author(self, title):
-        return EC.presence_of_all_elements_located((By.XPATH, self.QUESTION_TITLE % title))
 
 class Page(object):
     BASE_URL = 'https://otvet.mail.ru/'
