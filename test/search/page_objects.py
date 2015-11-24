@@ -95,10 +95,16 @@ class QuestionInSearchForm(Component):
 
     def __init__(self, driver, xpath):
         super(QuestionInSearchForm, self).__init__(driver)
+        self.xpath = xpath
         self.TITLE = xpath + "/a[contains(@class, 'item__text')]"
         self.AUTHOR = xpath + "/div[@class='item__stats']/a[contains(@href, 'profile')]"
         self.CATEGORY = xpath + "//span[contains(@class, 'item__stat item__stat')]"
         self.LINK = xpath + "//a[contains(@class, 'item__answer')]"
+
+    def wait(self):
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, self.xpath))
+        )
 
     def get_title(self):
         return self.driver.find_element_by_xpath(self.TITLE).text
@@ -120,7 +126,9 @@ class SearchResultsForm(Component):
     MORE = "//button[contains(@class, 'btn-more')]"
 
     def get_question_form(self, id):
-        return QuestionInSearchForm(self.driver, self.QUESTION_SELECTOR % id)
+        question_form = QuestionInSearchForm(self.driver, self.QUESTION_SELECTOR % id)
+        question_form.wait()
+        return question_form
 
     def more_questions(self):
         self.driver.find_element_by_xpath(self.MORE).click()
