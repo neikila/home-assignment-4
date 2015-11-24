@@ -84,6 +84,23 @@ class TopToolBarForm(Component):
         self.driver.find_element_by_xpath(self.SUBMIT).click()
 
 
+class SearchResultsForm(Component):
+    QUESTIONS_LIST = "//div[contains(@class, 'list bordered')]"
+    QUESTION_SELECTOR = QUESTIONS_LIST + "/div[./a[@href='/question/%s']]"
+    QUESTION_TITLE = QUESTIONS_LIST + "//a[contains(@class, 'item__text') and text()=%s]"
+    QUESTION_AUTHOR = QUESTIONS_LIST + "//a[contains(@class, 'item__stat item__stat') and text()=%s]"
+    QUESTION_CATEGORY = QUESTIONS_LIST + "//span[contains(@class, 'item__stat item__stat') and contains(text(), %s)]"
+    QUESTION_LINK = QUESTIONS_LIST + "//a[contains(@class, 'item__answer')]"
+
+    def get_question(self, id):
+        return self.driver.find_element_by_xpath(self.QUESTION_SELECTOR)
+
+    def check_title(self, title):
+        return EC.presence_of_all_elements_located((By.XPATH, self.QUESTION_TITLE % title))
+
+    def check_author(self, title):
+        return EC.presence_of_all_elements_located((By.XPATH, self.QUESTION_TITLE % title))
+
 class Page(object):
     BASE_URL = 'https://otvet.mail.ru/'
     PATH = ''
