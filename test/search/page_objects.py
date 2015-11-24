@@ -110,9 +110,13 @@ class QuestionInSearchForm(Component):
 class SearchResultsForm(Component):
     QUESTIONS_LIST = "//div[contains(@class, 'list bordered')]"
     QUESTION_SELECTOR = QUESTIONS_LIST + "/div[./a[@href='/question/%s']]"
+    MORE = "//button[contains(@class, 'btn-more')]"
 
     def get_question_form(self, id):
         return QuestionInSearchForm(self.driver, self.QUESTION_SELECTOR % id)
+
+    def more_questions(self):
+        self.driver.find_element_by_xpath(self.MORE).click()
 
 
 class Page(object):
