@@ -7,19 +7,6 @@ from test_data import TestSearch
 class PositiveTests(TestSearch):
     YEAR = u"год"
 
-    def tearDown(self):
-        # pass
-        self.driver.quit()
-
-    def setUp(self):
-        browser = 'CHROME'
-
-        self.driver = Remote(
-            command_executor='http://127.0.0.1:4444/wd/hub',
-            desired_capabilities=getattr(DesiredCapabilities, browser)
-                .copy()
-        )
-
     def test_author(self):
         search_page = SearchPage(self.driver)
         search_page.open()
@@ -93,19 +80,6 @@ class PositiveTests(TestSearch):
 class NegativeTests(TestSearch):
     JAVA_SUBCATEGORY = u"Java"
     MONTH = u"месяц"
-
-    def tearDown(self):
-        # pass
-        self.driver.quit()
-
-    def setUp(self):
-        browser = 'CHROME'
-
-        self.driver = Remote(
-            command_executor='http://127.0.0.1:4444/wd/hub',
-            desired_capabilities=getattr(DesiredCapabilities, browser)
-                .copy()
-        )
 
     def test_wrong_category(self):
         search_page = SearchPage(self.driver)
