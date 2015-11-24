@@ -95,7 +95,6 @@ class TopToolBarForm(Component):
     pattern = re.compile("https://otvet.mail.ru/question/[0-9]+")
     FIRST_QUESTION = "//div[@class='search-component']/div/div/a[2]"
 
-
     def search(self, text):
         self.driver.find_element_by_xpath(self.SEARCH_TEXT).send_keys(text)
 
@@ -128,16 +127,15 @@ class QuestionInSearchForm(Component):
     def get_category(self):
         return self.driver.find_element_by_xpath(self.CATEGORY).text[1:-1]
 
-    # Да одно и то же, но смысл разный, и понятно, что достаем из формы
-    def get_subcategory(self):
-        return self.driver.find_element_by_xpath(self.CATEGORY).text
-
 
 class SearchResultsForm(Component):
     QUESTIONS_LIST = "//div[contains(@class, 'list bordered')]"
     QUESTION_SELECTOR = QUESTIONS_LIST + "/div[./a[@href='/question/%s']]"
     MORE = "//button[contains(@class, 'btn-more')]"
     WAIT_TIME = 10
+    SORT_BY_TIME = "//a[text()='По дате']"
+    QUESTIONS = QUESTIONS_LIST + "/div[contains(@class, 'item_similiar')]"
+    DATE = "//div[@class='item__stats']/div[2]"
 
     def get_question_form(self, q_id):
         question_form = QuestionInSearchForm(self.driver, self.QUESTION_SELECTOR % q_id)
@@ -153,6 +151,15 @@ class SearchResultsForm(Component):
         except:
             return False
 
+    def set_sort_by_time(self):
+        # TODO
+        self.driver.find_element_by_xpath(self.SORT_BY_TIME).click()
+
+    def get_questions(self):
+        return self.driver.find_elements_by_xpath(self.QUESTIONS)
+
+    def get_question_date(self, element):
+        return element.find_element_by_xpath(self.DATE).text
 
 class Page(object):
     BASE_URL = 'https://otvet.mail.ru/'
