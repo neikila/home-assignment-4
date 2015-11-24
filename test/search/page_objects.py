@@ -2,6 +2,7 @@
 import os
 
 import time
+import re
 import unittest
 import urlparse
 
@@ -22,19 +23,19 @@ class SideBarForm(Component):
     PERIOD = "id('ColumnLeft')/div/a[text()='%s']"
     CATEGORY = "//div[@class='current-category']//a[text()='%s']"
     SUBCATEGORY = "//div[@class='current-category']//a[text()='%s']"
+    category_pattern = re.compile("https://otvet.mail.ru/search/c-[0-9]+/.+")
+
+    def get_category_url(self, xpath):
+        WebDriverWait(self.driver, 10).until(
+            lambda s: self.category_pattern.match(self.driver.find_element_by_xpath(xpath).get_attribute("href")) is not None
+        )
+        return self.driver.find_element_by_xpath(xpath).get_attribute("href")
 
     def set_category(self, category_name):
-        time.sleep(1)
-        element = self.driver.find_element_by_xpath(self.CATEGORY % category_name)
-        self.driver.get(element.get_attribute("href"))
-        time.sleep(1)
-        # ActionChains(self.driver).move_to_element(element).click(element).perform()
+        self.driver.get(self.get_category_url(self.CATEGORY % category_name))
 
     def set_subcategory(self, subcategory_name):
-        time.sleep(1)
-        element = self.driver.find_element_by_xpath(self.SUBCATEGORY % subcategory_name)
-        self.driver.get(element.get_attribute("href"))
-        time.sleep(1)
+        self.driver.get(self.get_category_url(self.SUBCATEGORY % subcategory_name))
 
     def set_period(self, perioud):
         self.driver.find_element_by_xpath(self.PERIOD % perioud).click()
