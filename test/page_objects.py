@@ -53,8 +53,6 @@ class AskForm(Component):
     SWITCH_NOTIFICATION = "id('ask-receive-email')"
     SWITCH_COMMENTS = "id('ask-allow-comments')"
     TERMS = "//a[@href='https://help.mail.ru/otvety-help/agreement']"
-    # TODO У меня такого SUBMIT нет
-    SUBMIT = "id('ask-q-only')"
     SUBMIT_QUESTION = "//div[@class='ask-submit']/button"
 
     def wait_for_upload(self):
@@ -94,6 +92,9 @@ class AskForm(Component):
     def set_subcategory(self, subcategory_name):
         self.driver.find_element_by_xpath(self.SUBCATEGORY + (self.OPTION % subcategory_name)).click()
 
+    def get_error_form(self):
+        return ErrorForm(self.driver)
+
 
 class QuestionForm(Component):
     QUESTION = "//*[contains(@class,'q--qtext')]/index"
@@ -119,13 +120,14 @@ class QuestionForm(Component):
         return self.driver.find_element_by_xpath(self.USERNAME).text
 
     def delete(self):
-        self.driver.find_element_by_xpath(self.DELETE).clicl()
+        self.driver.find_element_by_xpath(self.DELETE).click()
 
     def get_category(self):
         return self.driver.find_element_by_xpath(self.CATEGORY).text
 
     def get_subcategory(self):
         return self.driver.find_element_by_xpath(self.SUBCATEGORY).text
+
 
 class ProfileListForm(Component):
     LAST_QUESTION = "//div[@class='page-profile-list']/div[1]/a"
@@ -158,6 +160,17 @@ class VideoForm(Component):
 
     def submit(self):
         self.driver.find_element_by_xpath(self.SUBMIT).click()
+
+
+class ErrorForm(Component):
+    TITLE = '//div[@class="popup--header"]/span'
+    MESSAGE = '//div[@class="popup--content "]'
+
+    def get_title(self):
+        return self.driver.find_element_by_xpath(self.TITLE).text
+
+    def get_message(self):
+        return self.driver.find_element_by_xpath(self.MESSAGE).text
 
 
 class Page(object):
