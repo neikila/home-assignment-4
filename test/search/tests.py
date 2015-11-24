@@ -41,7 +41,7 @@ class PositiveTests(unittest.TestCase):
         side_bar = search_page.get_side_bar_form
         side_bar.set_category(self.OTHER_CATEGORY)
 
-        search_results = search_page.get_search_results_form(self.driver)
+        search_results = search_page.get_search_results_form
         self.assertTrue(search_results.check_question_exist(self.QUESTION_ID_OTHER))
 
     def test_author(self):

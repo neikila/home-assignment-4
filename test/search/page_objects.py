@@ -7,6 +7,7 @@ import urlparse
 from selenium.webdriver import DesiredCapabilities, Remote
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 
 
@@ -21,7 +22,8 @@ class SideBarForm(Component):
     SUBCATEGORY = "//div[@class='current-category']//a[text()='%s']"
 
     def set_category(self, category_name):
-        self.driver.find_element_by_xpath(self.CATEGORY % category_name).click()
+        element = self.driver.find_element_by_xpath(self.CATEGORY % category_name)
+        ActionChains(self.driver).move_to_element(element).click(element)
 
     def set_subcategory(self, subcategory_name):
         self.driver.find_element_by_xpath(self.SUBCATEGORY % subcategory_name).click()
