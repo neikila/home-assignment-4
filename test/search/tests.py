@@ -13,6 +13,7 @@ class PositiveTests(unittest.TestCase):
     QUESTION_TITLE_OTHER = u"\"Тестирование длины форм -\""
     OTHER_CATEGORY = u'Другое'
 
+
     def tearDown(self):
         # pass
         self.driver.quit()
@@ -25,7 +26,6 @@ class PositiveTests(unittest.TestCase):
             desired_capabilities=getattr(DesiredCapabilities, browser)
                 .copy()
         )
-        self.auth()
 
     def test_category(self):
         search_page = SearchPage(self.driver)
@@ -33,3 +33,9 @@ class PositiveTests(unittest.TestCase):
         top_bar.search(self.QUESTION_TITLE_OTHER)
         top_bar.submit()
 
+    def test_author(self):
+        search_page = SearchPage(self.driver)
+        search_page.open()
+        top_bar = search_page.get_top_bar_form
+        top_bar.search(self.QUESTION_TITLE_OTHER)
+        top_bar.submit()
