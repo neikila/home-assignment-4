@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
+import time
 import unittest
 import urlparse
 
@@ -23,8 +24,13 @@ class SideBarForm(Component):
     SUBCATEGORY = "//div[@class='current-category']//a[text()='%s']"
 
     def set_category(self, category_name):
+        WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((By.XPATH, self.CATEGORY % category_name))
+        )
         element = self.driver.find_element_by_xpath(self.CATEGORY % category_name)
-        ActionChains(self.driver).move_to_element(element).click(element)
+        print(element.get_attribute("href"))
+        self.driver.get(element.get_attribute("href"))
+        # ActionChains(self.driver).move_to_element(element).click(element).perform()
 
     def set_subcategory(self, subcategory_name):
         self.driver.find_element_by_xpath(self.SUBCATEGORY % subcategory_name).click()

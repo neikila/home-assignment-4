@@ -60,6 +60,7 @@ class PositiveTests(unittest.TestCase):
         results_form = self.accurate_search(search_page, self.QUESTION_TITLE_PROGRAMMING)
 
         question_form = results_form.get_question_form(self.QUESTION_ID_PROGRAMMING)
+        time.sleep(10)
         self.assertEquals(question_form.get_category(), self.PYTHON_SUBCATEGORY)
 
     def test_question_text(self):
