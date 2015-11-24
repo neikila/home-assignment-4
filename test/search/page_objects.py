@@ -48,9 +48,10 @@ class QuestionForm(Component):
     DELETE = "//button[@data-type='delete-question']"
     CATEGORY = "//a[contains(@class,'list__title')]/span[@itemprop='title']"
     SUBCATEGORY = "//a[contains(@class,'selected')]/span[@itemprop='title']"
+    WAIT_TIME = 10
 
     def wait(self):
-        WebDriverWait(self.driver, 10).until(
+        WebDriverWait(self.driver, self.WAIT_TIME).until(
             EC.presence_of_element_located((By.XPATH, self.QUESTION_FIELD))
         )
 
@@ -75,9 +76,10 @@ class QuestionForm(Component):
 
 class ProfileListForm(Component):
     LAST_QUESTION = "//div[@class='page-profile-list']/div[1]/a"
+    WAIT_TIME = 10
 
     def get_last_question_url(self):
-        WebDriverWait(self.driver, 10).until(
+        WebDriverWait(self.driver, self.WAIT_TIME).until(
             EC.presence_of_element_located((By.XPATH, self.LAST_QUESTION))
         )
         return self.driver.find_element_by_xpath(self.LAST_QUESTION).get_attribute("href")
@@ -88,13 +90,14 @@ class TopToolBarForm(Component):
     SUBMIT = "//button[contains(@class, 'js-submit-button')]"
     SEARCH_RESULTS_SUCCESS = "//div[@class='page-search']/div[@class='search-info']//b"
     SEARCH_RESULTS_FAIL = "//div[@class='search-page']"
+    WAIT_TIME = 10
 
     def search(self, text):
         self.driver.find_element_by_xpath(self.SEARCH_TEXT).send_keys(text)
 
     def submit(self):
         self.driver.find_element_by_xpath(self.SUBMIT).click()
-        WebDriverWait(self.driver, 10).until(
+        WebDriverWait(self.driver, self.WAIT_TIME).until(
             EC.presence_of_element_located((By.XPATH, self.SEARCH_RESULTS_SUCCESS + '|' + self.SEARCH_RESULTS_FAIL))
         )
 
@@ -132,6 +135,7 @@ class SearchResultsForm(Component):
     QUESTIONS_LIST = "//div[contains(@class, 'list bordered')]"
     QUESTION_SELECTOR = QUESTIONS_LIST + "/div[./a[@href='/question/%s']]"
     MORE = "//button[contains(@class, 'btn-more')]"
+    WAIT_TIME = 10
 
     def get_question_form(self, id):
         question_form = QuestionInSearchForm(self.driver, self.QUESTION_SELECTOR % id)
@@ -143,7 +147,7 @@ class SearchResultsForm(Component):
 
     def check_question_exist(self, id):
         try:
-            WebDriverWait(self.driver, 10).until(
+            WebDriverWait(self.driver, self.WAIT_TIME).until(
                 EC.presence_of_element_located((By.XPATH, self.QUESTION_SELECTOR % id))
             )
             return True

@@ -94,3 +94,15 @@ class PositiveTests(unittest.TestCase):
 
         search_results = search_page.get_search_results_form
         self.assertTrue(search_results.check_question_exist(self.QUESTION_ID_PROGRAMMING))
+
+    def test_wrong_category(self):
+        search_page = SearchPage(self.driver)
+        search_page.open()
+
+        self.search(search_page, self.QUESTION_TITLE_PROGRAMMING)
+
+        side_bar = search_page.get_side_bar_form
+        side_bar.set_category(self.OTHER_CATEGORY)
+
+        search_results = search_page.get_search_results_form
+        self.assertFalse(search_results.check_question_exist(self.QUESTION_ID_PROGRAMMING))
