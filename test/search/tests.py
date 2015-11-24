@@ -4,34 +4,13 @@ from test.question.page_objects import *
 
 
 class PositiveTests(unittest.TestCase):
-    CATEGORY = u'Программирование'
-    SUBCATEGORY = u'Python'
+    QUESTION_ID_PROGRAMMING = u"184484161"
+    PROG_CATEGORY = u'Программирование'
+    PYTHON_SUBCATEGORY = u'Python'
     USERNAME = u'Артур Пирожков'
 
-    def auth(self):
-        auth_page = AuthPage(self.driver)
-        auth_page.open()
-
-        auth_form = auth_page.form
-        auth_form.open_form()
-        auth_form.set_login(self.USEREMAIL)
-        auth_form.set_password(self.PASSWORD)
-        auth_form.submit()
-
-    def ask_question(self, comments_off=True, notifications_off=True):
-        ask_page = AskPage(self.driver)
-        ask_page.open()
-        ask_form = ask_page.form
-        ask_form.set_question(self.QUESTION)
-        ask_form.set_description(self.DESCRIPTION)
-        if comments_off:
-            ask_form.off_comments()
-        if notifications_off:
-            ask_form.off_notifications()
-        ask_form.set_category(self.CATEGORY)
-        ask_form.set_subcategory(self.SUBCATEGORY)
-        # ask_form.submit()
-        # А теперь вводим капчу
+    QUESTION_ID_OTHER = u"182362166"
+    OTHER_CATEGORY = u'Другое'
 
     def get_created_question_page(self):
         profile_page = ProfilePage(self.driver)
