@@ -7,7 +7,7 @@ from test.search.tests import PositiveTests, NegativeTests
 
 if __name__ == '__main__':
     suite = unittest.TestSuite(
-        map(PositiveTests, ['test_check_number_of_answers'])
+        map(PositiveTests, ['test_accurate_search_by_text'])
     )
     result = unittest.TextTestRunner().run(suite)
     sys.exit(not result.wasSuccessful())

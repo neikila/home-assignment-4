@@ -29,13 +29,19 @@ class SideBarForm(Component):
         return self.driver.find_element_by_xpath(xpath).get_attribute("href")
 
     def set_category(self, category_name):
+        current_url = self.driver.current_url
         self.driver.get(self.get_url(self.CATEGORY % category_name))
+        TopToolBarForm(self.driver).wait_for_result_to_load(current_url)
 
     def set_subcategory(self, subcategory_name):
+        current_url = self.driver.current_url
         self.driver.get(self.get_url(self.SUBCATEGORY % subcategory_name))
+        TopToolBarForm(self.driver).wait_for_result_to_load(current_url)
 
     def set_period(self, period):
+        current_url = self.driver.current_url
         self.driver.get(self.get_url(self.PERIOD % period))
+        TopToolBarForm(self.driver).wait_for_result_to_load(current_url)
 
 
 class QuestionForm(Component):
@@ -59,7 +65,7 @@ class ProfileListForm(Component):
 class TopToolBarForm(Component):
     SEARCH_TEXT = "//input[contains(@class, 'pm-toolbar__search__input')]"
     SUBMIT = "//button[contains(@class, 'js-submit-button')]"
-    SEARCH_RESULTS_SUCCESS = "//div[@class='page-search']/div[@class='search-info']//b"
+    SEARCH_RESULTS_SUCCESS = "//div[@class='search-component']/div/div/a[@href]"
     SEARCH_RESULTS_FAIL = "//div[@class='search-page']/p[contains(@class, 'smallBull')]"
     WAIT_TIME = 10
     PATTERN = re.compile("https://otvet.mail.ru/question/[0-9]+")
@@ -72,15 +78,19 @@ class TopToolBarForm(Component):
         self.driver.find_element_by_xpath(self.SEARCH_TEXT).send_keys(text)
 
     def submit(self):
+        current_url = self.driver.current_url
         self.driver.find_element_by_xpath(self.SUBMIT).click()
-        self.wait_for_result_to_load()
+        self.wait_for_result_to_load(current_url)
 
-    def wait_for_result_to_load(self):
+    def wait_for_result_to_load(self, url):
         WebDriverWait(self.driver, self.WAIT_TIME).until(
-            lambda s: (EC.element_to_be_clickable((By.XPATH, self.SEARCH_RESULTS_FAIL)) and
-                       len(self.driver.find_element_by_xpath(self.SEARCH_TEXT).text) != 0) or
-                      (EC.presence_of_element_located((By.XPATH, self.SEARCH_RESULTS_SUCCESS)) and
-                       self.PATTERN.match(self.driver.find_element_by_xpath(self.FIRST_QUESTION).get_attribute("href")) is not None)
+            lambda s: self.driver.current_url != url
+        )
+        WebDriverWait(self.driver, self.WAIT_TIME).until(
+            lambda s: len(self.driver.find_element_by_xpath(self.SEARCH_TEXT).get_attribute('value')) != 0 and
+                  (EC.presence_of_element_located((By.XPATH, self.SEARCH_RESULTS_FAIL)) or
+                   EC.presence_of_element_located((By.XPATH, self.SEARCH_RESULTS_SUCCESS)) and
+                   self.PATTERN.match(self.driver.find_element_by_xpath(self.FIRST_QUESTION).get_attribute("href")) is not None)
         )
 
 
@@ -95,19 +105,29 @@ class QuestionInSearchForm(Component):
         self.LINK = xpath + "//a[contains(@class, 'item__answer')]"
         self.ANSWERS = self.LINK + "/span"
 
+    def wait(self):
+        WebDriverWait(self.driver, 10.0).until(
+            EC.presence_of_element_located((By.XPATH, self.AUTHOR))
+        )
+
     def get_title(self):
+        self.wait()
         return self.driver.find_element_by_xpath(self.TITLE).text
 
     def get_author(self):
+        self.wait()
         return self.driver.find_element_by_xpath(self.AUTHOR).text
 
     def get_category(self):
+        self.wait()
         return self.driver.find_element_by_xpath(self.CATEGORY).text[1:-1]
 
     def get_answers(self):
+        self.wait()
         return self.driver.find_element_by_xpath(self.ANSWERS).text
 
     def go_to_question_page_and_get_form(self):
+        self.wait()
         link = self.driver.find_element_by_xpath(self.LINK).get_attribute("href")
         self.driver.get(link)
         return QuestionForm(self.driver)
@@ -141,8 +161,9 @@ class SearchResultsForm(Component):
         WebDriverWait(self.driver, 10).until(
             lambda s: self.FILTER_PATTERN.match(self.driver.find_element_by_xpath(self.SORT_BY_TIME).get_attribute("href")) is not None
         )
+        current_url = self.driver.current_url
         self.driver.find_element_by_xpath(self.SORT_BY_TIME).click()
-        TopToolBarForm(self.driver).wait_for_result_to_load()
+        TopToolBarForm(self.driver).wait_for_result_to_load(current_url)
 
     def get_questions(self):
         return self.driver.find_elements_by_xpath(self.QUESTIONS)
