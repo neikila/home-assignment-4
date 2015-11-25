@@ -136,14 +136,9 @@ class PositiveTests(TestSearch):
         search_results.set_sort_by_time()
 
         elements = search_results.get_dates()
-        last_time = self.parse_str_to_tuple(elements[0].text)
-        result = True
-        for i in range(1, len(elements)):
-            new_time = self.parse_str_to_tuple(elements[i].text)
-            result = self.is_first_less_than_second(last_time, new_time)
-            if not result:
-                break
-            last_time = new_time
+        first_time = self.parse_str_to_tuple(elements[0].text)
+        second_time = self.parse_str_to_tuple(elements[1].text)
+        result = self.is_first_less_than_second(first_time, second_time)
         self.assertTrue(result)
 
     def test_check_number_of_answers(self):
