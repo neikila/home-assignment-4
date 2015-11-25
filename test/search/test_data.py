@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from test.search.page_objects import *
-
+import unittest
+import os
+from selenium.webdriver import DesiredCapabilities, Remote
 
 class TestSearch(unittest.TestCase):
     QUESTION_ID_PROGRAMMING = u"184484161"
