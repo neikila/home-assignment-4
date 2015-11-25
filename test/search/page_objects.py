@@ -79,6 +79,9 @@ class TopToolBarForm(Component):
 
     def submit(self):
         current_url = self.driver.current_url
+        WebDriverWait(self.driver, self.WAIT_TIME).until(
+            EC.presence_of_element_located((By.XPATH, self.SUBMIT))
+        )
         self.driver.find_element_by_xpath(self.SUBMIT).click()
         self.wait_for_result_to_load(current_url)
 

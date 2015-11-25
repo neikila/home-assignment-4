@@ -34,8 +34,8 @@ class TestSearch(unittest.TestCase):
         self.driver.quit()
 
     def setUp(self):
-        browser = 'CHROME'
-        # browser = os.environ['TTHA4BROWSER']
+        # browser = 'CHROME'
+        browser = os.environ['TTHA4BROWSER']
 
         self.driver = Remote(
             command_executor='http://127.0.0.1:4444/wd/hub',
