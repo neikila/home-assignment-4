@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from test.search.page_objects import *
+from test.search.page_objects import SearchPage
 from test_data import TestSearch
 
 
@@ -144,8 +144,6 @@ class PositiveTests(TestSearch):
             if not result:
                 break
             last_time = new_time
-        self.assertTrue(result)
-
         self.assertTrue(result)
 
     def test_check_number_of_answers(self):
