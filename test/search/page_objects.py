@@ -141,7 +141,6 @@ class SearchResultsForm(Component):
         self.driver.find_element_by_xpath(self.SORT_BY_TIME).click()
         TopToolBarForm(self.driver).wait_for_result_to_load()
 
-
     def get_questions(self):
         return self.driver.find_elements_by_xpath(self.QUESTIONS)
 
@@ -150,6 +149,7 @@ class SearchResultsForm(Component):
 
     def get_dates(self):
         return self.driver.find_elements_by_xpath("//div[contains(@class, 'item__stats')]/div[2]")
+
 
 class Page(object):
     BASE_URL = 'https://otvet.mail.ru/'
