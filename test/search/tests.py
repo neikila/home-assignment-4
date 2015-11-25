@@ -29,13 +29,13 @@ class PositiveTests(TestSearch):
         else:
             return False
 
-    def parse_str_to_tuple(self, data_str):
+    def date_to_int(self, data_str):
         array = data_str.split(' ')
         try:
             first = int(array[1])
-            return first, self.convert(array[2])
+            return self.convert(array[2]) * 100 + first
         except ValueError:
-            return 1, self.convert(array[1])
+            return self.convert(array[1]) * 100 + 1
 
     def test_author(self):
         search_page = SearchPage(self.driver)
@@ -136,10 +136,7 @@ class PositiveTests(TestSearch):
         search_results.set_sort_by_time()
 
         elements = search_results.get_dates()
-        first_time = self.parse_str_to_tuple(elements[0].text)
-        second_time = self.parse_str_to_tuple(elements[1].text)
-        result = self.is_first_less_than_second(first_time, second_time)
-        self.assertTrue(result)
+        self.assertTrue(sorted(elements, key=lambda n:self.date_to_int(n.text)) == elements)
 
     def test_check_number_of_answers(self):
         search_page = SearchPage(self.driver)
