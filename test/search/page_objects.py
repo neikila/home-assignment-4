@@ -66,6 +66,9 @@ class TopToolBarForm(Component):
     FIRST_QUESTION = "//div[@class='search-component']/div/div/a[2]"
 
     def search(self, text):
+        WebDriverWait(self.driver, self.WAIT_TIME).until(
+            EC.presence_of_element_located((By.XPATH, self.SEARCH_TEXT))
+        )
         self.driver.find_element_by_xpath(self.SEARCH_TEXT).send_keys(text)
 
     def submit(self):
