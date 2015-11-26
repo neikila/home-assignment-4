@@ -73,8 +73,12 @@ class TopToolBarForm(Component):
 
     def search(self, text):
         WebDriverWait(self.driver, self.WAIT_TIME).until(
-            EC.presence_of_element_located((By.XPATH, self.SEARCH_TEXT))
+            EC.visibility_of_element_located((By.XPATH, self.SEARCH_TEXT))
         )
+        WebDriverWait(self.driver, self.WAIT_TIME).until(
+            EC.element_to_be_clickable((By.XPATH, self.SEARCH_TEXT))
+        )
+
         self.driver.find_element_by_xpath(self.SEARCH_TEXT).send_keys(text)
 
     def submit(self):
@@ -85,7 +89,7 @@ class TopToolBarForm(Component):
         self.driver.find_element_by_xpath(self.SUBMIT).click()
         self.wait_for_result_to_load(current_url)
 
-    def wait_for_result_to_load(self, url):
+    def wait_for_result_to_load(self, url=""):
         WebDriverWait(self.driver, self.WAIT_TIME).until(
             lambda s: self.driver.current_url != url
         )
@@ -207,6 +211,13 @@ class QuestionPage(Page):
 
 class SearchPage(Page):
     PATH = '/search'
+    SEARCH_RESULTS_FAIL = "//div[@class='search-page']/p[contains(@class, 'smallBull')]"
+
+    def open(self):
+        super(SearchPage, self).open()
+        WebDriverWait(self.driver, 10).until(
+            lambda s: EC.presence_of_element_located((By.XPATH, self.SEARCH_RESULTS_FAIL))
+        )
 
     @property
     def get_top_bar_form(self):
